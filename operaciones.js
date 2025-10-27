@@ -6,7 +6,7 @@ const leerRegistros = async () => {
     return data;
   } catch (error) {
     console.log("Error leyendo las citas: " + error);
-    return [];
+    return "[]";
   }
 };
 
@@ -25,7 +25,7 @@ const mostrarLista = async () => {
         `);
     });
   } catch (error) {
-    console.log("Error leyendo las citas: " + error);
+    console.log("Error al mostrar las citas: " + error);
     return [];
   }
 }
@@ -33,19 +33,23 @@ const mostrarLista = async () => {
 const registrar = async (datos) => {
   try {
     const data = await leerRegistros();
-    data.push({
+    const citas = JSON.parse(data || "[]");
+    citas.push({
       nombre: datos[1],
       edad: datos[2],
       animal: datos[3],
       color: datos[4],
       enfermedad: datos[5],
     });
-    writeFileSync("citas.json", JSON.stringify(data));
+    writeFileSync("citas.json", JSON.stringify(citas));
+    console.log(`
+        ¡Mascota ${datos[1]} agregada!
+      `);
   } catch (error) {
     console.log(
-      "Fallo en el registro de la mascota, intente nuevamente." + error
+      "Fallo en el registro de la mascota, intente nuevamente. " + error
     );
-  }
+  };
 };
 
 export { registrar, leerRegistros, mostrarLista };
